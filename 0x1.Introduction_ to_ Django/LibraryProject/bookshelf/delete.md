@@ -8,6 +8,7 @@ book.delete()
 # Verifying the deletion by trying to retrieve all books
 books = Book.objects.all()
 print(books)
+
 ## Expected Output
 >>> books
 <QuerySet []>
