@@ -2,6 +2,7 @@
 
 ## Python Command
 ```python
+from bookshelf.models import Book
 # Deleting the book instance
 book.delete()
 
