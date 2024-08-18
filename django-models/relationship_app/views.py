@@ -4,7 +4,9 @@ from django.views.generic.detail import DetailView
 from .models import Library
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
+from django.contrib.auth.decorators import user_passes_test
+
 
 def list_books(request):
     books = Book.objects.all()
@@ -26,3 +28,19 @@ def register(request):
     else:
         form = UserCreationForm()
     return render(request, 'relationship_app/register.html', {'form': form})
+
+# Helper function to check roles
+def check_role(user, role):
+    return user.userprofile.role == role
+
+@user_passes_test(lambda u: check_role(u, 'Admin'))
+def admin_view(request):
+    return render(request, 'relationship_app/admin_view.html')
+
+@user_passes_test(lambda u: check_role(u, 'Librarian'))
+def librarian_view(request):
+    return render(request, 'relationship_app/librarian_view.html')
+
+@user_passes_test(lambda u: check_role(u, 'Member'))
+def member_view(request):
+    return render(request, 'relationship_app/member_view.html')
