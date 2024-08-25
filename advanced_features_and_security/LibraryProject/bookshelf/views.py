@@ -27,3 +27,4 @@ def delete_item(request, item_id):
 def book_list(request):
     books = Book.objects.all()  # Fetch all books from the database
     return render(request, 'bookshelf/book_list.html', {'books': books})
+
