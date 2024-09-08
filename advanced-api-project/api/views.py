@@ -10,12 +10,18 @@ from .models import Book
 from .serializers import BookSerializer
 from rest_framework.exceptions import ValidationError
 from datetime import date
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 
 # ListView: Retrieve all books
-class BookListView(generics.ListAPIView):
+class BookListView(generics.ListCreateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]  # Allow read-only access to unauthenticated users
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['title', 'author__name', 'publication_year']  # Filter by title, author, and publication year
+    search_fields = ['title', 'author__name']  # Search in title and author's name
+    ordering_fields = ['title', 'publication_year']  # Order by title and publication year
 
 # DetailView: Retrieve a single book by ID
 class BookDetailView(generics.RetrieveAPIView):
